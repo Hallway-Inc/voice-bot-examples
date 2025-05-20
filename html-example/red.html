@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Page - Voice Bot HTML Example</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="/" class="nav-logo">Voice Bot HTML Demo</a>
+            <div class="nav-links">
+                <a href="/red.html" class="active">Red</a>
+                <a href="/blue.html">Blue</a>
+                <a href="/green.html">Green</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="red-page">
+        <div class="container">
+            <h1>Red Page</h1>
+            <div class="content-card">
+                <p>Try asking the bot to show you the blue or green page.</p>
+                <p><em>Note: Since this is a static HTML example, you'll need to click the links manually. For automatic navigation, check out the Next.js example.</em></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Hallway Embed -->
+    <hallway-embed-base
+        id="hallway-embed"
+        character-id="7394103e-ba65-41d8-ac98-a43348cee84f"
+        style="z-index: 100;">
+    </hallway-embed-base>
+    <div style="padding-bottom: 100px; width: 100%;"></div>
+
+    <script src="https://hallway.ai/embed-loader.js"></script>
+</body>
+</html> 
