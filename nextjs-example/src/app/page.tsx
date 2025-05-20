@@ -11,17 +11,17 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-red-50 p-6 rounded-lg border border-red-200">
               <p className="text-red-700">
-                "Take me to the red page"
+                &ldquo;Take me to the red page&rdquo;
               </p>
             </div>
             <div className="bg-blue-50 p-6 rounded-lg border border-blue-200">
               <p className="text-blue-700">
-                "Show me the blue page"
+                &ldquo;Show me the blue page&rdquo;
               </p>
             </div>
             <div className="bg-green-50 p-6 rounded-lg border border-green-200">
               <p className="text-green-700">
-                "Go to the green page"
+                &ldquo;Go to the green page&rdquo;
               </p>
             </div>
           </div>

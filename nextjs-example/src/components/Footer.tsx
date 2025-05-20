@@ -1,63 +1,63 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
+import Script from "next/script";
+import { useEffect, useRef } from "react";
 
-interface OutgoingMessage {
-  type: string;
-  url: string;
-  openInNewTab?: boolean;
-}
+const DEFAULT_CHARACTER_ID = "7394103e-ba65-41d8-ac98-a43348cee84f";
 
-interface FooterProps {
-  includeEmbed?: boolean;
-}
-
-export default function Footer({ includeEmbed = false }: FooterProps) {
+export default function Footer() {
   const router = useRouter();
+  const { resolvedTheme } = useTheme();
+  const hallwayEmbedBaseRef = useRef<HallwayEmbedBase>(null);
 
+  /**
+   * Effect: Listen for Next.js route changes and send to embed
+   */
   useEffect(() => {
-    if (!includeEmbed) return;
+    const hallwayEmbedBaseEl = hallwayEmbedBaseRef.current;
+    if (!hallwayEmbedBaseEl) return;
 
-    // Message handler for iframe communication
-    const messageHandler = (event: MessageEvent) => {
-      console.log("messageHandler", event);
-      // Type guard to ensure event.data has the expected structure
-      if (event.data && typeof event.data === "object") {
-        const data = event.data as OutgoingMessage;
-        console.log(data)
+    // Note: router.events is not available in App Router
+    // We'll handle navigation through the navigate event instead
+  }, []);
 
-        if (data.type === "url") {
-          if (data.openInNewTab) {
-            window.open(data.url, "_blank");
-          } else {
-            void router.push(data.url);
-          }
+  /**
+   * Effect: Listen for <hallway-embed-base> events
+   */
+  useEffect(() => {
+    if (!hallwayEmbedBaseRef.current) return;
+
+    const controller = new AbortController();
+
+    hallwayEmbedBaseRef.current.addEventListener(
+      "navigate",
+      (e: CustomEvent<{ url: string; openInNewTab?: boolean }>) => {
+        if (e.detail.openInNewTab) {
+          window.open(e.detail.url, "_blank");
+        } else {
+          void router.push(e.detail.url);
         }
-      }
-    };
+      },
+      { signal: controller.signal },
+    );
 
-    // Add event listener
-    window.addEventListener("message", messageHandler);
-
-    // Clean up event listener when component unmounts
     return () => {
-      window.removeEventListener("message", messageHandler);
+      controller.abort("Effect cleanup");
     };
-  }, [router, includeEmbed]);
+  }, [router]);
 
   return (
-    <footer className="w-full py-4 text-center text-sm text-gray-600">
-      {includeEmbed && (
-        <>
-          {/* @ts-expect-error - hallway-embed is a custom element defined by the embed-loader.js script */}
-          <hallway-embed
-            character-id="7394103e-ba65-41d8-ac98-a43348cee84f"
-            custom-navigation="true"
-          />
-          <script src="https://hallway.ai/embed-loader.js" async type="text/javascript"></script>
-        </>
-      )}
-    </footer>
+    <>
+      <hallway-embed-base
+        ref={hallwayEmbedBaseRef}
+        style={{ zIndex: 100 }}
+        character-id={process.env.NEXT_PUBLIC_HALLWAY_CHARACTER_ID || DEFAULT_CHARACTER_ID}
+        query={`theme=${resolvedTheme}`}
+      />
+      <Script src="https://hallway.ai/embed-loader.js" strategy="afterInteractive" />
+      <div className="pb-[100px] w-full"></div>
+    </>
   );
 } 
