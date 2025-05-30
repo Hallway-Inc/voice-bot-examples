@@ -2,42 +2,43 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 
 type CustomElementProps<
-  T extends HTMLElement,
-  A extends Record<string, unknown>,
+	T extends HTMLElement,
+	A extends Record<string, unknown>,
 > = React.DetailedHTMLProps<React.HTMLAttributes<T>, T> & A;
 
 // Constructors
 
 type HallwayEmbedMinimized =
-  import("@/embed/src/components/hallway-embed-minimized").HallwayEmbedMinimized;
+	import("./embed-loader").HallwayEmbedMinimized;
 type HallwayEmbedExpanded =
-  import("@/embed/src/components/hallway-embed-expanded").HallwayEmbedExpanded;
+	import("./embed-loader").HallwayEmbedExpanded;
 type HallwayEmbedBase =
-  import("@/embed/src/components/hallway-embed-base").HallwayEmbedBase;
+	import("./embed-loader").HallwayEmbedBase;
 
 // Attributes
 
 type HallwayEmbedMinimizedAttributes =
-  import("@/embed/src/components/hallway-embed-minimized").HallwayEmbedMinimizedAttributes;
+	import("./embed-loader").HallwayEmbedMinimizedAttributes;
 type HallwayEmbedExpandedAttributes =
-  import("@/embed/src/components/hallway-embed-expanded").HallwayEmbedExpandedAttributes;
+	import("./embed-loader").HallwayEmbedExpandedAttributes;
 type HallwayEmbedBaseAttributes =
-  import("@/embed/src/components/hallway-embed-base").HallwayEmbedBaseAttributes;
+	import("./embed-loader").HallwayEmbedBaseAttributes;
 
-// JSX
-declare namespace JSX {
-  interface IntrinsicElements {
-    "hallway-embed-minimized": CustomElementProps<
-      HallwayEmbedMinimized,
-      HallwayEmbedMinimizedAttributes
-    >;
-    "hallway-embed-expanded": CustomElementProps<
-      HallwayEmbedExpanded,
-      HallwayEmbedExpandedAttributes
-    >;
-    "hallway-embed-base": CustomElementProps<
-      HallwayEmbedBase,
-      HallwayEmbedBaseAttributes
-    >;
+declare namespace React {
+  declare namespace JSX {
+    interface IntrinsicElements {
+      "hallway-embed-minimized": CustomElementProps<
+        HallwayEmbedMinimized,
+        HallwayEmbedMinimizedAttributes
+      >;
+      "hallway-embed-expanded": CustomElementProps<
+        HallwayEmbedExpanded,
+        HallwayEmbedExpandedAttributes
+      >;
+      "hallway-embed-base": CustomElementProps<
+        HallwayEmbedBase,
+        HallwayEmbedBaseAttributes
+      >;
+    }
   }
-} 
+}
