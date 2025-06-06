@@ -1,3 +1,5 @@
+import "react"
+
 // Import types dynamically so our declarations stay global https://stackoverflow.com/a/51114250
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 
@@ -24,7 +26,8 @@ type HallwayEmbedExpandedAttributes =
 type HallwayEmbedBaseAttributes =
 	import("./embed-loader").HallwayEmbedBaseAttributes;
 
-declare namespace React {
+
+declare module "react" {
   declare namespace JSX {
     interface IntrinsicElements {
       "hallway-embed-minimized": CustomElementProps<
