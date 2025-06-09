@@ -54,7 +54,6 @@ export default function Footer() {
         ref={hallwayEmbedBaseRef}
         style={{ zIndex: 100 }}
         character-id={process.env.NEXT_PUBLIC_HALLWAY_CHARACTER_ID || DEFAULT_CHARACTER_ID}
-        query={`theme=${resolvedTheme}`}
       />
       <Script src="https://hallway.ai/embed-loader.js" strategy="afterInteractive" />
       <div className="pb-[100px] w-full"></div>
