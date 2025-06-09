@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Suspense } from "react";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import HallwayEmbed from "@/components/HallwayEmbed";
+import { HallwayEmbedProvider } from "@/context/HallwayEmbed";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,12 +30,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
         <Navbar />
-        <main className="flex-grow">
-          {children}
-        </main>
-        <Suspense>
-          <HallwayEmbed />
-        </Suspense>
+        <HallwayEmbedProvider>
+          <main className="flex-grow">
+            {children}
+          </main>
+        </HallwayEmbedProvider>
       </body>
     </html>
   );
