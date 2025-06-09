@@ -1,14 +1,13 @@
 'use client';
 
 import { HallwayEmbedBase } from "@/types/embed-loader";
-import { useTheme } from "next-themes";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Script from "next/script";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 const DEFAULT_CHARACTER_ID = "7394103e-ba65-41d8-ac98-a43348cee84f";
 
-export default function Footer() {
+export default function HallwayEmbed() {
   const router = useRouter();
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -75,7 +74,6 @@ export default function Footer() {
         character-id={process.env.NEXT_PUBLIC_HALLWAY_CHARACTER_ID || DEFAULT_CHARACTER_ID}
       />
       <Script src="https://hallway.ai/embed-loader.js" strategy="afterInteractive" />
-      <div className="pb-[100px] w-full"></div>
     </>
   );
 } 
