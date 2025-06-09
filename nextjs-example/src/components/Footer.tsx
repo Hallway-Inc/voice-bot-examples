@@ -1,15 +1,17 @@
 'use client';
 
+import { HallwayEmbedBase } from "@/types/embed-loader";
 import { useTheme } from "next-themes";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Script from "next/script";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const DEFAULT_CHARACTER_ID = "7394103e-ba65-41d8-ac98-a43348cee84f";
 
 export default function Footer() {
   const router = useRouter();
-  const { resolvedTheme } = useTheme();
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
   const hallwayEmbedBaseRef = useRef<HallwayEmbedBase>(null);
 
   /**
@@ -19,9 +21,26 @@ export default function Footer() {
     const hallwayEmbedBaseEl = hallwayEmbedBaseRef.current;
     if (!hallwayEmbedBaseEl) return;
 
-    // Note: router.events is not available in App Router
-    // We'll handle navigation through the navigate event instead
-  }, []);
+    let unmounted = false;
+
+    const asyncFn = async () => {
+      const url = new URL(window.location.href)
+      url.pathname = pathname
+      url.search = searchParams.toString()
+
+      await customElements.whenDefined("hallway-embed-base")
+      if (unmounted) return;
+
+      hallwayEmbedBaseEl.sendHistoryState(url.toString())
+    }
+
+    asyncFn().catch((e) => console.error(`Error sending history state: ${e}`))
+
+    return () => {
+      unmounted = true;
+    }
+    
+  }, [pathname, searchParams]);
 
   /**
    * Effect: Listen for <hallway-embed-base> events
