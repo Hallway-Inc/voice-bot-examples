@@ -1,10 +1,11 @@
+import { CustomMessageButton } from "@/components/CustomMessageButton";
+
 export default function Home() {
   return (
     <main className="min-h-screen p-8">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold mb-6">Voice Navigation Demo</h1>
-        
-        <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-200">
+        <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-200 dark:bg-neutral-900 dark:border-neutral-800">
           <p className="mb-6 text-lg">
             Try these voice commands to navigate:
           </p>
@@ -24,6 +25,12 @@ export default function Home() {
                 &ldquo;Go to the green page&rdquo;
               </p>
             </div>
+          </div>
+          <div className="mt-6">
+            <p className="mb-6 text-lg">
+              Manually trigger a custom response:
+            </p>
+            <CustomMessageButton label="Tell a joke" message="User clicked a button that triggers you to tell a joke" />
           </div>
         </div>
       </div>
