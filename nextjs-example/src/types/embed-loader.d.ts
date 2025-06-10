@@ -49,7 +49,10 @@ declare class HallwayEmbedExpanded extends HTMLElement {
   private query?;
   private expanded;
   private isMobile;
+  private connectedController?;
   constructor();
+  connectedCallback(): void;
+  disconnectedCallback(): void;
   /** Strictly typed setAttribute */
   setAttribute(name: HallwayEmbedExpandedAttribute | `data-${string}`, value: string): void;
   /** Strictly typed removeAttribute */
@@ -62,7 +65,7 @@ declare class HallwayEmbedExpanded extends HTMLElement {
   sendHistoryState(url: string): void;
   sendIsOpen(isOpen: boolean): void;
   sendUserContent(content: string): void;
-  sendUnlockAudio(): void;
+  sendTryReconnect(): void;
 }
 
 //#endregion
@@ -100,7 +103,6 @@ declare class HallwayEmbedBase extends HTMLElement {
   removeEventListener<K extends keyof HallwayEmbedBaseEventMap>(type: K, listener: (this: HallwayEmbedBase, ev: HallwayEmbedBaseEventMap[K]) => void, options?: boolean | EventListenerOptions): void;
   sendUserContent(content: string): void;
   sendHistoryState(url: string): void;
-  sendUnlockAudio(): void;
 }
 
 //#endregion
