@@ -1,5 +1,7 @@
 # Next.js Voice Bot Example
 
+Live demo: https://voice-bot-next-js-example.vercel.app/
+
 This example demonstrates how to implement the Voice Bot embed script in a Next.js application using the App Router.
 
 ## Features

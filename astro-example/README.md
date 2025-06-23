@@ -1,5 +1,7 @@
 # Astro Example
 
+Live demo: https://voice-bot-astro-example.vercel.app/
+
 ```bash
 pnpm install
 pnpm dev
