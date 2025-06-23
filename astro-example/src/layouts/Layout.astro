@@ -1,8 +1,8 @@
 ---
+import { CHARACTER_ID } from "astro:env/client";
+
 import Navbar from "./Navbar.astro";
 import "../styles/global.css";
-
-const DEFAULT_CHARACTER_ID = "7394103e-ba65-41d8-ac98-a43348cee84f";
 ---
 
 <html lang="en">
@@ -56,7 +56,7 @@ const DEFAULT_CHARACTER_ID = "7394103e-ba65-41d8-ac98-a43348cee84f";
 
     <slot />
 
-    <hallway-embed-base character-id={DEFAULT_CHARACTER_ID}
+    <hallway-embed-base character-id={CHARACTER_ID}
     ></hallway-embed-base>
   </body>
 </html>
