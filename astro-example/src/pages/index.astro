@@ -1,0 +1,66 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <main class="min-h-screen p-8">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-4xl font-bold mb-6">Astro Voice Navigation Demo</h1>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <a
+          href="/red"
+          class="bg-red-50 p-6 rounded-lg border border-red-200 text-center"
+        >
+          <span class="text-red-700 font-semibold">Red Page</span>
+        </a>
+        <a
+          href="/blue"
+          class="bg-blue-50 p-6 rounded-lg border border-blue-200 text-center"
+        >
+          <span class="text-blue-700 font-semibold">Blue Page</span>
+        </a>
+        <a
+          href="/green"
+          class="bg-green-50 p-6 rounded-lg border border-green-200 text-center"
+        >
+          <span class="text-green-700 font-semibold">Green Page</span>
+        </a>
+      </div>
+      <div class="mt-10">
+        <p class="mb-4 text-lg">Manually trigger a custom response:</p>
+        <button
+          id="custom-message-btn"
+          class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 active:bg-blue-700"
+          type="button"
+        >
+          Tell a joke
+        </button>
+        <script>
+          import type { HallwayEmbedBase } from "../types/embed-loader";
+
+          const customMessageBtn = document.querySelector<HTMLButtonElement>(
+            "#custom-message-btn",
+          );
+          const hallwayEmbedBaseEl =
+            document.querySelector<HallwayEmbedBase>("hallway-embed-base");
+
+          if (!customMessageBtn) {
+            throw new Error("Missing #custom-message-btn element");
+          }
+
+          if (!hallwayEmbedBaseEl) {
+            throw new Error("Missing hallway-embed-base element");
+          }
+
+          await customElements.whenDefined("hallway-embed-base");
+
+          customMessageBtn.onclick = () => {
+            hallwayEmbedBaseEl.sendUserContent(
+              "User clicked a button that triggers you to tell a joke",
+            );
+          };
+        </script>
+      </div>
+    </div>
+  </main>
+</Layout>

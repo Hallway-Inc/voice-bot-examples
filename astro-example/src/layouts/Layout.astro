@@ -1,0 +1,62 @@
+---
+import Navbar from "./Navbar.astro";
+import "../styles/global.css";
+
+const DEFAULT_CHARACTER_ID = "7394103e-ba65-41d8-ac98-a43348cee84f";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Astro</title>
+    <script is:inline src="https://hallway.ai/embed-loader.js"></script>
+
+    <script>
+      import Swup from "swup";
+      import SwupHeadPlugin from "@swup/head-plugin";
+      import SwupScriptsPlugin from "@swup/scripts-plugin";
+
+      import type { HallwayEmbedBase } from "../types/embed-loader";
+
+      const hallwayEmbedBaseEl =
+        document.querySelector<HallwayEmbedBase>("hallway-embed-base");
+      if (!hallwayEmbedBaseEl) {
+        throw new Error("Hallway embed not found");
+      }
+
+      // https://github.com/swup/astro/blob/e1b65955d03fcc0fe5adc11e0ad80768511c4e0f/README.md#control-over-the-initialization
+      const swup = new Swup({
+        containers: ["main"],
+        animationSelector: false,
+        plugins: [
+          new SwupHeadPlugin(),
+          new SwupScriptsPlugin({ optin: true }), // Don't re-run embed loader script
+        ],
+      });
+
+      hallwayEmbedBaseEl.addEventListener("navigate", (event) => {
+        const url = event.detail.url;
+        if (event.detail.openInNewTab) {
+          window.open(url, "_blank");
+        } else {
+          swup.navigate(url);
+        }
+      });
+
+      swup.hooks.on("page:view", () => {
+        hallwayEmbedBaseEl.sendHistoryState(window.location.toString());
+      });
+    </script>
+  </head>
+  <body>
+    <Navbar />
+
+    <slot />
+
+    <hallway-embed-base character-id={DEFAULT_CHARACTER_ID}
+    ></hallway-embed-base>
+  </body>
+</html>
