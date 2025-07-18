@@ -28,6 +28,8 @@ interface IframeToParentMessageMap {
     openInNewTab: boolean;
   };
   close: Record<string, never>;
+  /** Iframe connected and ready */
+  onConnected: Record<string, never>;
   /** Iframe expanded state changed */
   expandedState: {
     isExpanded: boolean;
@@ -42,7 +44,7 @@ type HallwayEmbedExpandedAttribute = (typeof HallwayEmbedExpanded.observedAttrib
 type HallwayEmbedExpandedAttributes = { [T in HallwayEmbedExpandedAttribute]?: string };
 declare class HallwayEmbedExpanded extends HTMLElement {
   #private;
-  static observedAttributes: readonly ["character-id", "frontend-url", "query", "expanded"];
+  static observedAttributes: readonly ["character-id", "frontend-url", "query", "expanded", "data-embed-base-init-time"];
   private iframeEl;
   private characterId?;
   private frontendUrl?;
@@ -50,6 +52,7 @@ declare class HallwayEmbedExpanded extends HTMLElement {
   private expanded;
   private isMobile;
   private connectedController?;
+  private embedBaseInitTime?;
   constructor();
   connectedCallback(): void;
   disconnectedCallback(): void;
@@ -77,6 +80,9 @@ interface HallwayEmbedBaseEventMap {
     url: string;
     openInNewTab: boolean;
   }>;
+  expanded: CustomEvent<void>;
+  minimized: CustomEvent<void>;
+  onConnected: CustomEvent<void>;
 }
 declare class HallwayEmbedBase extends HTMLElement {
   #private;
@@ -89,6 +95,7 @@ declare class HallwayEmbedBase extends HTMLElement {
   private loadConfigController?;
   private config?;
   private isMounted;
+  private embedBaseInitTime;
   private isMobileExpanded;
   constructor();
   connectedCallback(): void;

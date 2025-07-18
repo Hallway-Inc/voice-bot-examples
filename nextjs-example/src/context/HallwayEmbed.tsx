@@ -66,6 +66,29 @@ export function HallwayEmbedProvider({ children }: { children: React.ReactNode }
       { signal: controller.signal },
     );
 
+    hallwayEmbedBaseRef.current.addEventListener(
+			"minimized",
+			() => {
+				console.log("minimized")
+			},
+			{ signal: controller.signal },
+		);
+		hallwayEmbedBaseRef.current.addEventListener(
+			"expanded",
+			() => {
+				console.log("expanded")
+			},
+			{ signal: controller.signal },
+		);
+
+    hallwayEmbedBaseRef.current.addEventListener(
+      "onConnected",
+      () => {
+        console.log("onConnected")
+      },
+      { signal: controller.signal },
+    );
+
     return () => {
       controller.abort("Effect cleanup");
     };
