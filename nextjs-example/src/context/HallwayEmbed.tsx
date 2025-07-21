@@ -82,9 +82,9 @@ export function HallwayEmbedProvider({ children }: { children: React.ReactNode }
 		);
 
     hallwayEmbedRef.current.addEventListener(
-      "onConnected",
+      "connected",
       () => {
-        console.log("onConnected")
+        console.log("connected")
       },
       { signal: controller.signal },
     );

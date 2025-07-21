@@ -29,7 +29,7 @@ interface IframeToParentMessageMap {
   };
   close: Record<string, never>;
   /** Iframe connected and ready */
-  onConnected: Record<string, never>;
+  connected: Record<string, never>;
   /** Iframe expanded state changed */
   expandedState: {
     isExpanded: boolean;
@@ -82,7 +82,7 @@ interface HallwayEmbedEventMap {
   }>;
   expanded: CustomEvent<void>;
   minimized: CustomEvent<void>;
-  onConnected: CustomEvent<void>;
+  connected: CustomEvent<void>;
 }
 declare class HallwayEmbed extends HTMLElement {
   #private;
