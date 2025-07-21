@@ -1,8 +1,8 @@
 import "react"
 
 import type {
-  HallwayEmbedBase,
-  HallwayEmbedBaseAttributes,
+  HallwayEmbed,
+  HallwayEmbedAttributes,
   HallwayEmbedMinimized,
   HallwayEmbedMinimizedAttributes,
   HallwayEmbedExpanded,
@@ -25,10 +25,7 @@ declare module "react" {
         HallwayEmbedExpanded,
         HallwayEmbedExpandedAttributes
       >;
-      "hallway-embed-base": CustomElementProps<
-        HallwayEmbedBase,
-        HallwayEmbedBaseAttributes
-      >;
+      "hallway-embed": CustomElementProps<HallwayEmbed, HallwayEmbedAttributes>;
     }
   }
 }

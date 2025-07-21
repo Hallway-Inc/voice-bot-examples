@@ -19,11 +19,11 @@ import "../styles/global.css";
       import SwupHeadPlugin from "@swup/head-plugin";
       import SwupScriptsPlugin from "@swup/scripts-plugin";
 
-      import type { HallwayEmbedBase } from "../types/embed-loader";
+      import type { HallwayEmbed } from "../types/embed-loader";
 
-      const hallwayEmbedBaseEl =
-        document.querySelector<HallwayEmbedBase>("hallway-embed-base");
-      if (!hallwayEmbedBaseEl) {
+      const hallwayEmbedEl =
+        document.querySelector<HallwayEmbed>("hallway-embed");
+      if (!hallwayEmbedEl) {
         throw new Error("Hallway embed not found");
       }
 
@@ -37,7 +37,7 @@ import "../styles/global.css";
         ],
       });
 
-      hallwayEmbedBaseEl.addEventListener("navigate", (event) => {
+      hallwayEmbedEl.addEventListener("navigate", (event) => {
         const url = event.detail.url;
         if (event.detail.openInNewTab) {
           window.open(url, "_blank");
@@ -47,7 +47,7 @@ import "../styles/global.css";
       });
 
       swup.hooks.on("page:view", () => {
-        hallwayEmbedBaseEl.sendHistoryState(window.location.toString());
+        hallwayEmbedEl.sendHistoryState(window.location.toString());
       });
     </script>
   </head>
@@ -56,7 +56,6 @@ import "../styles/global.css";
 
     <slot />
 
-    <hallway-embed-base character-id={CHARACTER_ID}
-    ></hallway-embed-base>
+    <hallway-embed character-id={CHARACTER_ID} disable-navigation></hallway-embed>
   </body>
 </html>

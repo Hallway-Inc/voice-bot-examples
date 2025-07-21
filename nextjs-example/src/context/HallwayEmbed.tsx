@@ -1,6 +1,6 @@
 'use client';
 
-import { HallwayEmbedBase } from "@/types/embed-loader";
+import { HallwayEmbed } from "@/types/embed-loader";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Script from "next/script";
 import { createContext, Suspense, useCallback, useContext, useEffect, useRef } from "react";
@@ -8,7 +8,7 @@ import { createContext, Suspense, useCallback, useContext, useEffect, useRef } f
 const DEFAULT_CHARACTER_ID = "7394103e-ba65-41d8-ac98-a43348cee84f";
 
 type HallwayEmbedContextValue = {
-  getDefinedElement: (signal?: AbortSignal) => Promise<HallwayEmbedBase>;
+  getDefinedElement: (signal?: AbortSignal) => Promise<HallwayEmbed>;
 }
 
 const HallwayEmbedContext = createContext<HallwayEmbedContextValue | null>(null);
@@ -23,10 +23,10 @@ export function useHallwayEmbed() {
 
 export function HallwayEmbedProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const hallwayEmbedBaseRef = useRef<HallwayEmbedBase>(null);
+  const hallwayEmbedRef = useRef<HallwayEmbed>(null);
 
   const getDefinedElement = useCallback((signal?: AbortSignal) => {
-    return new Promise<HallwayEmbedBase>((resolve, reject) => {
+    return new Promise<HallwayEmbed>((resolve, reject) => {
       signal?.throwIfAborted()
 
       const listenerController = new AbortController();
@@ -35,11 +35,11 @@ export function HallwayEmbedProvider({ children }: { children: React.ReactNode }
         reject(signal.reason)
       }, { signal: listenerController.signal, once: true })
 
-      customElements.whenDefined("hallway-embed-base").then(() => {
-        if (!hallwayEmbedBaseRef.current) {
-          throw new Error(`<hallway-embed-base> is defined but "hallwayEmbedBaseRef" is not set`)
+      customElements.whenDefined("hallway-embed").then(() => {
+        if (!hallwayEmbedRef.current) {
+          throw new Error(`<hallway-embed> is defined but "hallwayEmbedRef" is not set`)
         }
-        resolve(hallwayEmbedBaseRef.current)
+        resolve(hallwayEmbedRef.current)
       }).finally(() => {
         listenerController.abort()
       })
@@ -47,14 +47,14 @@ export function HallwayEmbedProvider({ children }: { children: React.ReactNode }
   }, [])
 
   /**
-   * Effect: Listen for <hallway-embed-base> events
+   * Effect: Listen for <hallway-embed> events
    */
   useEffect(() => {
-    if (!hallwayEmbedBaseRef.current) return;
+    if (!hallwayEmbedRef.current) return;
 
     const controller = new AbortController();
 
-    hallwayEmbedBaseRef.current.addEventListener(
+    hallwayEmbedRef.current.addEventListener(
       "navigate",
       (e: CustomEvent<{ url: string; openInNewTab?: boolean }>) => {
         if (e.detail.openInNewTab) {
@@ -66,14 +66,14 @@ export function HallwayEmbedProvider({ children }: { children: React.ReactNode }
       { signal: controller.signal },
     );
 
-    hallwayEmbedBaseRef.current.addEventListener(
+    hallwayEmbedRef.current.addEventListener(
 			"minimized",
 			() => {
 				console.log("minimized")
 			},
 			{ signal: controller.signal },
 		);
-		hallwayEmbedBaseRef.current.addEventListener(
+		hallwayEmbedRef.current.addEventListener(
 			"expanded",
 			() => {
 				console.log("expanded")
@@ -81,7 +81,7 @@ export function HallwayEmbedProvider({ children }: { children: React.ReactNode }
 			{ signal: controller.signal },
 		);
 
-    hallwayEmbedBaseRef.current.addEventListener(
+    hallwayEmbedRef.current.addEventListener(
       "onConnected",
       () => {
         console.log("onConnected")
@@ -97,10 +97,11 @@ export function HallwayEmbedProvider({ children }: { children: React.ReactNode }
 
   return (
     <>
-      <hallway-embed-base
-        ref={hallwayEmbedBaseRef}
+      <hallway-embed
+        ref={hallwayEmbedRef}
         style={{ zIndex: 100 }}
         character-id={process.env.NEXT_PUBLIC_HALLWAY_CHARACTER_ID || DEFAULT_CHARACTER_ID}
+        disable-navigation="true"
       />
       <Script src="https://hallway.ai/embed-loader.js" strategy="afterInteractive" />
       <HallwayEmbedContext.Provider value={{ getDefinedElement }}>

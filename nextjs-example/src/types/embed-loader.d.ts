@@ -36,7 +36,7 @@ interface IframeToParentMessageMap {
   };
 }
 /** Dictionary of event types to custom events produced by embed components */
-type HallwayEmbedEventMap = { [K in keyof IframeToParentMessageMap]: CustomEvent<IframeToParentMessageMap[K]> }; //#endregion
+type HallwayEmbedEventMap$1 = { [K in keyof IframeToParentMessageMap]: CustomEvent<IframeToParentMessageMap[K]> }; //#endregion
 //#region src/components/hallway-embed-expanded.d.ts
 
 /** Union of { type, data } objects received in "message" event from iframe*/
@@ -61,9 +61,9 @@ declare class HallwayEmbedExpanded extends HTMLElement {
   /** Strictly typed removeAttribute */
   removeAttribute(name: HallwayEmbedExpandedAttribute | `data-${string}`): void;
   /** Strictly typed event listeners */
-  addEventListener<K extends keyof HallwayEmbedEventMap>(type: K, listener: (this: HallwayEmbedExpanded, ev: HallwayEmbedEventMap[K]) => void, options?: boolean | AddEventListenerOptions): void;
+  addEventListener<K extends keyof HallwayEmbedEventMap$1>(type: K, listener: (this: HallwayEmbedExpanded, ev: HallwayEmbedEventMap$1[K]) => void, options?: boolean | AddEventListenerOptions): void;
   /** Strictly typed event listeners */
-  removeEventListener<K extends keyof HallwayEmbedEventMap>(type: K, listener: (this: HallwayEmbedExpanded, ev: HallwayEmbedEventMap[K]) => void, options?: boolean | EventListenerOptions): void;
+  removeEventListener<K extends keyof HallwayEmbedEventMap$1>(type: K, listener: (this: HallwayEmbedExpanded, ev: HallwayEmbedEventMap$1[K]) => void, options?: boolean | EventListenerOptions): void;
   attributeChangedCallback(name: HallwayEmbedExpandedAttribute, oldValue: string | null, newValue: string | null): void;
   sendHistoryState(url: string): void;
   sendIsOpen(isOpen: boolean): void;
@@ -72,10 +72,10 @@ declare class HallwayEmbedExpanded extends HTMLElement {
 }
 
 //#endregion
-//#region src/components/hallway-embed-base.d.ts
-type HallwayEmbedBaseAttribute = (typeof HallwayEmbedBase.observedAttributes)[number];
-type HallwayEmbedBaseAttributes = { [T in HallwayEmbedBaseAttribute]?: string };
-interface HallwayEmbedBaseEventMap {
+//#region src/components/hallway-embed.d.ts
+type HallwayEmbedAttribute = (typeof HallwayEmbed.observedAttributes)[number];
+type HallwayEmbedAttributes = { [T in HallwayEmbedAttribute]?: string };
+interface HallwayEmbedEventMap {
   navigate: CustomEvent<{
     url: string;
     openInNewTab: boolean;
@@ -84,9 +84,9 @@ interface HallwayEmbedBaseEventMap {
   minimized: CustomEvent<void>;
   onConnected: CustomEvent<void>;
 }
-declare class HallwayEmbedBase extends HTMLElement {
+declare class HallwayEmbed extends HTMLElement {
   #private;
-  static observedAttributes: readonly ["character-id", "frontend-url", "query", "api-url"];
+  static observedAttributes: readonly ["character-id", "frontend-url", "query", "api-url", "disable-navigation"];
   hallwayEmbedExpandedEl: HallwayEmbedExpanded;
   hallwayEmbedMinimizedEl: HallwayEmbedMinimized;
   private visibility?;
@@ -97,32 +97,22 @@ declare class HallwayEmbedBase extends HTMLElement {
   private isMounted;
   private embedBaseInitTime;
   private isMobileExpanded;
+  private pendingCleanupNavigation?;
   constructor();
   connectedCallback(): void;
-  attributeChangedCallback(name: HallwayEmbedBaseAttribute, oldValue: string | null, newValue: string | null): void;
+  disconnectedCallback(): void;
+  attributeChangedCallback(name: HallwayEmbedAttribute, oldValue: string | null, newValue: string | null): void;
   /** Strictly typed setAttribute */
-  setAttribute(name: HallwayEmbedBaseAttribute | `data-${string}`, value: string): void;
+  setAttribute(name: HallwayEmbedAttribute | `data-${string}`, value: string): void;
   /** Strictly typed removeAttribute */
-  removeAttribute(name: HallwayEmbedBaseAttribute | `data-${string}`): void;
+  removeAttribute(name: HallwayEmbedAttribute | `data-${string}`): void;
   /** Strictly typed event listeners */
-  addEventListener<K extends keyof HallwayEmbedBaseEventMap>(type: K, listener: (this: HallwayEmbedBase, ev: HallwayEmbedBaseEventMap[K]) => void, options?: boolean | AddEventListenerOptions): void;
+  addEventListener<K extends keyof HallwayEmbedEventMap>(type: K, listener: (this: HallwayEmbed, ev: HallwayEmbedEventMap[K]) => void, options?: boolean | AddEventListenerOptions): void;
   /** Strictly typed event listeners */
-  removeEventListener<K extends keyof HallwayEmbedBaseEventMap>(type: K, listener: (this: HallwayEmbedBase, ev: HallwayEmbedBaseEventMap[K]) => void, options?: boolean | EventListenerOptions): void;
+  removeEventListener<K extends keyof HallwayEmbedEventMap>(type: K, listener: (this: HallwayEmbed, ev: HallwayEmbedEventMap[K]) => void, options?: boolean | EventListenerOptions): void;
   sendUserContent(content: string): void;
   sendHistoryState(url: string): void;
 }
 
 //#endregion
-//#region src/components/hallway-embed.d.ts
-type HallwayEmbedAttribute = (typeof HallwayEmbed.observedAttributes)[number];
-type HallwayEmbedAttributes = { [T in HallwayEmbedAttribute]?: string };
-declare class HallwayEmbed extends HTMLElement {
-  #private;
-  static observedAttributes: readonly ["character-id", "frontend-url", "query", "api-url"];
-  hallwayEmbedBaseEl: HallwayEmbedBase;
-  constructor();
-  attributeChangedCallback(name: HallwayEmbedAttribute, oldValue: string | null, newValue: string | null): void;
-}
-
-//#endregion
-export { HallwayEmbed, HallwayEmbedAttributes, HallwayEmbedBase, HallwayEmbedBaseAttributes, HallwayEmbedExpanded, HallwayEmbedExpandedAttributes, HallwayEmbedMinimized, HallwayEmbedMinimizedAttributes };
+export { HallwayEmbed, HallwayEmbedAttributes, HallwayEmbedExpanded, HallwayEmbedExpandedAttributes, HallwayEmbedMinimized, HallwayEmbedMinimizedAttributes };

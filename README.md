@@ -34,13 +34,13 @@ This defines various [web components](https://developer.mozilla.org/en-US/docs/W
 
 - `<hallway-embed-minimized>` - Minimized view when the embed is closed
 - `<hallway-embed-expanded>` - Expanded view of the bot which grows to fill its container, suitable for fully custom layouts
-- `<hallway-embed-base>` - Basic embed component that orchestrates minimized and expanded views, suitable for most custom integrations
-- `<hallway-embed>` - Batteries-included wrapper around the base element with default handling of navigation events
+- `<hallway-embed>` - Embed component that orchestrates minimized and expanded views with default handling of navigation events
 
-The following sections describe features of the `<hallway-embed-base>` component, which has roughly the same API as `<hallway-embed-expanded>`.
+The following sections describe features of the `<hallway-embed>` component, which has roughly the same API as `<hallway-embed-expanded>`.
 
 ### Attributes
 - `character-id`: The unique ID for a Hallway character, such as "18688523-d2d5-47e3-a5ce-e689395c7172"
+- `disable-navigation`: If you want to integrate seamless navigation with your frameworks, this disables our default navigation behavior (see [#site-navigation])
 
 ### Methods
 
@@ -75,9 +75,9 @@ You could use this to send a standalone message like "What's up?", or prompt the
 
 ### Site navigation
 
-Characters can automatically navigate the page and speak about what you're looking at.
+Characters can automatically navigate the page and speak about what you're looking at. By default, we navigate and listen for route changes using browser APIs, but you can disable this by setting the `disable-navigation` attribute so you can seamlessly integrate navigation with your site's framework.
 
-To support auto-navigation, listen for `"navigate"` events and navigate to the requested URL with your site's client-side routing mechanism.
+To handle the bot's navigation attempts, listen for `"navigate"` events and navigate to the requested URL with your site's client-side routing mechanism.
 
 ```js
 hallwayEmbedBaseEl.addEventListener("navigate", (event) => {
