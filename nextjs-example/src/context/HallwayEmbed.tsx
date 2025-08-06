@@ -3,12 +3,14 @@
 import { HallwayEmbed } from "@/types/embed-loader";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Script from "next/script";
-import { createContext, Suspense, useCallback, useContext, useEffect, useRef } from "react";
+import { createContext, Suspense, useCallback, useContext, useEffect, useRef, useState } from "react";
 
 const DEFAULT_CHARACTER_ID = "7394103e-ba65-41d8-ac98-a43348cee84f";
 
 type HallwayEmbedContextValue = {
   getDefinedElement: (signal?: AbortSignal) => Promise<HallwayEmbed>;
+  volume: number;
+  setVolume: (volume: number) => void;
 }
 
 const HallwayEmbedContext = createContext<HallwayEmbedContextValue | null>(null);
@@ -24,6 +26,16 @@ export function useHallwayEmbed() {
 export function HallwayEmbedProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const hallwayEmbedRef = useRef<HallwayEmbed>(null);
+  const [volume, setVolumeState] = useState(1);
+
+  const setVolume = useCallback((newVolume: number) => {
+    const clampedVolume = Math.max(0, Math.min(1, newVolume));
+    setVolumeState(clampedVolume);
+    
+    if (hallwayEmbedRef.current) {
+      hallwayEmbedRef.current.setVolume(clampedVolume);
+    }
+  }, []);
 
   const getDefinedElement = useCallback((signal?: AbortSignal) => {
     return new Promise<HallwayEmbed>((resolve, reject) => {
@@ -104,7 +116,7 @@ export function HallwayEmbedProvider({ children }: { children: React.ReactNode }
         disable-navigation="true"
       />
       <Script src="https://hallway.ai/embed-loader.js" strategy="afterInteractive" />
-      <HallwayEmbedContext.Provider value={{ getDefinedElement }}>
+      <HallwayEmbedContext.Provider value={{ getDefinedElement, volume, setVolume }}>
         {children}
         {/* Wrapped in Suspense boundary due to useSearchParams() */}
         <Suspense>
@@ -141,7 +153,7 @@ function HallwayEmbedHistoryState() {
       controller.abort();
     }
 
-  }, [pathname, searchParams]);
+  }, [pathname, searchParams, hallwayEmbed]);
 
   return null
 }

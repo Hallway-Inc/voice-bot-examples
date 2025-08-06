@@ -8,7 +8,8 @@ type HallwayEmbedMinimizedAttribute = keyof HallwayEmbedMinimizedAttributes;
 declare class HallwayEmbedMinimized extends HTMLElement {
   #private;
   static get observedAttributes(): Array<HallwayEmbedMinimizedAttribute>;
-  private avatarEl;
+  private avatarImageEl;
+  private avatarVideoEl;
   private greetingEl;
   private buttonEl;
   constructor();
@@ -69,6 +70,7 @@ declare class HallwayEmbedExpanded extends HTMLElement {
   sendIsOpen(isOpen: boolean): void;
   sendUserContent(content: string): void;
   sendTryReconnect(): void;
+  sendVolumeChange(volume: number): void;
 }
 
 //#endregion
@@ -83,6 +85,9 @@ interface HallwayEmbedEventMap {
   expanded: CustomEvent<void>;
   minimized: CustomEvent<void>;
   connected: CustomEvent<void>;
+  volumeChanged: CustomEvent<{
+    volume: number;
+  }>;
 }
 declare class HallwayEmbed extends HTMLElement {
   #private;
@@ -98,6 +103,7 @@ declare class HallwayEmbed extends HTMLElement {
   private embedBaseInitTime;
   private isMobileExpanded;
   private pendingCleanupNavigation?;
+  private currentVolume;
   constructor();
   connectedCallback(): void;
   disconnectedCallback(): void;
@@ -112,6 +118,8 @@ declare class HallwayEmbed extends HTMLElement {
   removeEventListener<K extends keyof HallwayEmbedEventMap>(type: K, listener: (this: HallwayEmbed, ev: HallwayEmbedEventMap[K]) => void, options?: boolean | EventListenerOptions): void;
   sendUserContent(content: string): void;
   sendHistoryState(url: string): void;
+  setVolume(volume: number): void;
+  getVolume(): number;
 }
 
 //#endregion

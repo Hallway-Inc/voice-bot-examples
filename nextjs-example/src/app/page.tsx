@@ -1,4 +1,5 @@
 import { CustomMessageButton } from "@/components/CustomMessageButton";
+import { VolumeSlider } from "@/components/VolumeSlider";
 
 export default function Home() {
   return (
@@ -32,6 +33,7 @@ export default function Home() {
             </p>
             <CustomMessageButton label="Tell a joke" message="User clicked a button that triggers you to tell a joke" />
           </div>
+          <VolumeSlider />
         </div>
       </div>
     </main>
